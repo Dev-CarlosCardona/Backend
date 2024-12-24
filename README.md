@@ -16,3 +16,5 @@ CREATE TABLE productos (
     Estado_Producto VARCHAR(255) NOT NULL,
     Cantidad INT
 );
+
+#Adicional se iniciaria con el comando "npm run dev"
