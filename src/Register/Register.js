@@ -116,7 +116,6 @@ RegisterProduct.post('/API/POST/INSERT-PRODUCT/', (req, res) => {
 
 RegisterProduct.put('/API/PUT/UPDATE-PRODUCT/:id', (req, res) => {
     const id = req.params.id;
-    console.log("ID recibido en backend:", id);
 
     const {
         Nombre_Producto,
