@@ -115,8 +115,8 @@ RegisterProduct.post('/API/POST/INSERT-PRODUCT/', (req, res) => {
 });
 
 RegisterProduct.put('/API/PUT/UPDATE-PRODUCT/:id', (req, res) => {
-    const id = req.params.id; // Obtiene el ID desde la URL
-    console.log("ID recibido:", id); // Verifica que el ID no sea undefined
+    const id = req.params.id;
+    console.log("ID recibido en backend:", id);
 
     const {
         Nombre_Producto,
@@ -137,49 +137,46 @@ RegisterProduct.put('/API/PUT/UPDATE-PRODUCT/:id', (req, res) => {
             console.error('Error al conectar con la base de datos:', err);
             return res.status(500).json({ success: false, message: 'Error del servidor' });
         }
-        try {
-            const sqlPutProduct = `
-                UPDATE productos SET 
-                    Nombre_Producto = ?,
-                    Referencia = ?,
-                    Precio = ?,
-                    Peso = ?,
-                    Categoria = ?,
-                    Estado_Producto = ?,
-                    Cantidad = ?
-                WHERE id = ?;
-            `;
 
-            const VALUES = [
-                Nombre_Producto,
-                Referencia,
-                Precio,
-                Peso,
-                Categoria,
-                Estado_Producto,
-                Cantidad,
-                id, // Asegúrate de que el ID se pasa correctamente
-            ];
+        const sqlPutProduct = `
+            UPDATE productos SET 
+                Nombre_Producto = ?,
+                Referencia = ?,
+                Precio = ?,
+                Peso = ?,
+                Categoria = ?,
+                Estado_Producto = ?,
+                Cantidad = ?
+            WHERE id = ?;
+        `;
 
-            connection.query(sqlPutProduct, VALUES, (err, results) => {
-                connection.release();
-                if (err) {
-                    console.error('Error de base de datos:', err);
-                    return res.status(500).json({ success: false, message: 'Error interno del servidor' });
-                }
+        const VALUES = [
+            Nombre_Producto,
+            Referencia,
+            Precio,
+            Peso,
+            Categoria,
+            Estado_Producto,
+            Cantidad,
+            id,
+        ];
 
-                if (results.affectedRows === 0) {
-                    return res.status(404).json({ success: false, message: 'No se encontró el registro para actualizar' });
-                }
+        connection.query(sqlPutProduct, VALUES, (err, results) => {
+            connection.release();
+            if (err) {
+                console.error('Error de base de datos:', err);
+                return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+            }
 
-                return res.status(200).json({ success: true, message: 'Producto actualizado exitosamente' });
-            });
-        } catch (error) {
-            console.error('Error en la actualización:', error);
-            res.status(500).json({ success: false, message: 'Error interno del servidor' });
-        }
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ success: false, message: 'No se encontró el registro para actualizar' });
+            }
+
+            return res.status(200).json({ success: true, message: 'Producto actualizado exitosamente' });
+        });
     });
 });
+
 
 
 RegisterProduct.delete('/API/DELETE/PRODUCT-DELETE/:id', (req, res) => {
@@ -238,7 +235,7 @@ RegisterProduct.get('/API/GET/LIST/INVENTORY/STOCK/', (req, res) => {
             return;
         }
         try {
-            const sql = `SELECT Nombre_Producto, Referencia, Precio, Peso, Categoria FROM productos WHERE Estado_Producto = 'STOCK'`;
+            const sql = `SELECT id, Nombre_Producto, Referencia, Precio, Peso, Categoria FROM productos WHERE Estado_Producto = 'STOCK'`;
             connection.query(sql, (error, result) => {
                 connection.release(); // Libera la conexión
 
