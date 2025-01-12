@@ -29,7 +29,7 @@ RegisterProduct.get('/API/GET/ALL-PRODUCT/', (req, res) => {
                     res.status(500).send('Error en la consulta a la base de datos');
                 } else {
                     // Devuelve un arreglo vacío si no hay resultados
-                    res.status(200).json(result || []);
+                    res.status(200).json(result);
                 }
             });
         } catch (error) {
@@ -234,17 +234,17 @@ RegisterProduct.get('/API/GET/LIST/INVENTORY/STOCK/', (req, res) => {
             return;
         }
         try {
-            const sql = `SELECT id, Nombre_Producto, Referencia, Precio, Peso, Categoria FROM productos WHERE Estado_Producto = 'STOCK'`;
+            const sql = `SELECT id, Nombre_Producto, Referencia, Precio, Peso, Categoria, Cantidad FROM productos WHERE Estado_Producto = 'STOCK'`;
             connection.query(sql, (error, result) => {
-                connection.release(); // Libera la conexión
+                connection.release(); 
 
                 if (error) {
                     console.error('Error en la consulta:', error);
                     res.status(500).send('Error en la consulta a la base de datos');
                 } else if (result.length > 0) {
-                    res.status(200).json(result); // Enviar datos al cliente
+                    res.status(200).json(result); 
                 } else {
-                    res.status(204).send('No hay resultados'); // Respuesta si no hay datos
+                    res.status(404).send('No hay resultados'); // Respuesta si no hay datos
                 }
             });
         } catch (error) {
