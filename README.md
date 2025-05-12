@@ -1,4 +1,4 @@
-# Prueba_Tecnica_Backend
+# Backend
 Software inventario cafeteria backend
 
 #en el partado .env solo se colocaria los datos de la base de datos 
